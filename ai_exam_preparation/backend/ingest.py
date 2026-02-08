@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 files = {
     "syllabus": os.path.join(BASE_DIR, "../data/syllabus.txt"),
-    "questions": os.path.join(BASE_DIR, "../data/question_paper.txt"),
+    "questions": os.path.join(BASE_DIR, "../data/questionpaper.txt"),
 }
 
 doc_id = 1

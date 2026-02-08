@@ -1,13 +1,19 @@
 import os
+from dotenv import load_dotenv
 import google.generativeai as genai
 
-# use env variable
-genai.configure(api_key="AIzaSyAPInS7TCkT4nlOF9bFlsxFA7C0d0QmMqc")
+# load env
+load_dotenv()
 
-# pick a model from your list
-model = genai.GenerativeModel("gemini-2.0-flash")
+# read values
+API_KEY = os.getenv("GOOGLE_API_KEY")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+
+# configure
+genai.configure(api_key=API_KEY)
 
 
-def generate_answer(prompt: str):
-    res = model.generate_content(prompt)
-    return res.text
+def generate_answer(prompt: str) -> str:
+    model = genai.GenerativeModel(MODEL_NAME)
+    response = model.generate_content(prompt)
+    return response.text

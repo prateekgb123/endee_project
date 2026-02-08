@@ -25,6 +25,7 @@ def health():
 
 
 @app.post("/ask")
+@app.post("/ask")
 def ask(q: Query):
     try:
         vector = get_embedding(q.question)
@@ -32,8 +33,10 @@ def ask(q: Query):
         results = search(vector)
 
         context = ""
-        for r in results.get("results", []):
-            context += r.get("text", "") + "\n"
+        matches = results["results"][0]["matches"]
+
+        for m in matches:
+            context += m["metadata"]["text"] + "\n"
 
         prompt = f"""
 You are an exam preparation AI.
@@ -54,9 +57,10 @@ Provide:
 
         return {
             "answer": answer,
-            "sources": [r.get("text", "") for r in results.get("results", [])]
+            "sources": [m["metadata"]["text"] for m in matches]
         }
 
     except Exception as e:
         print("🔥 ERROR IN /ask:", str(e))
         return {"answer": "Backend error: " + str(e), "sources": []}
+

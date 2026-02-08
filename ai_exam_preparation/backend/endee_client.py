@@ -1,18 +1,26 @@
 import requests
 
-BASE = "http://localhost:8080/api/v1"
+ENDEE_URL = "http://localhost:8080"
 
+# insert vector
+def add_doc(data):
+    res = requests.post(f"{ENDEE_URL}/api/v1/vector/upsert", json=data)
+    print("UPSERT:", res.status_code)
+    return res.text
+
+
+# search vectors
 def search(vector, top_k=5):
-    res = requests.post(f"{BASE}/vector/search", json={
-        "vector": vector,
-        "top_k": top_k
-    })
+    res = requests.post(
+        f"{ENDEE_URL}/api/v1/index/query",
+        json={
+            "vector": vector,
+            "top_k": top_k
+        }
+    )
 
-    print("ENDEE STATUS:", res.status_code)
-    print("ENDEE RESPONSE:", res.text[:300])
+    print("STATUS:", res.status_code)
+    print("RAW RESPONSE:", res.text)
 
-    # if response is not json → return empty results
-    try:
-        return res.json()
-    except Exception:
-        return {"results": []}
+    return res.json()
+
