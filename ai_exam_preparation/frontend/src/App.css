@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color: white;
+}
+
+.layout {
+  display: flex;
+}
+
+.page {
+  flex: 1;
+  padding: 30px;
+}
+
+.card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+button {
+  background: #22c55e;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}

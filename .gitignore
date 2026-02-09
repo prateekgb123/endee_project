@@ -10,14 +10,11 @@ build/*
 tests/build/
 
 # Sometimes data files are created for tetsing
-data/
-data/*
+
 
 # VS Code directory
 .vscode/
 .vscode/*
 
 # Frontend
-frontend/
-frontend/*
 .env
