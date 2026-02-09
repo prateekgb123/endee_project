@@ -16,14 +16,19 @@ for category, file in files.items():
         lines = f.readlines()
 
     for line in lines:
-        if len(line.strip()) > 10:
-            vector = get_embedding(line)
-            add_doc({
-                "id": f"doc{doc_id}",
-                "vector": vector,
-                "text": line,
+        text = line.strip()
+
+        if len(text) > 10:
+            vector = get_embedding(text)
+
+            metadata = {
+                "text": text,
                 "category": category
-            })
+            }
+
+            # ✅ correct call
+            add_doc(f"doc{doc_id}", vector, metadata)
+
             doc_id += 1
 
 print("✅ Data inserted into Endee")
