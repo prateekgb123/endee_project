@@ -3,11 +3,18 @@ import { useState } from "react";
 function AskAI() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const ask = async () => {
-    setAnswer("Thinking...");
+    if (!question.trim()) {
+      alert("Please enter a question");
+      return;
+    }
 
     try {
+      setLoading(true);
+      setAnswer("Thinking...");
+
       const res = await fetch("http://localhost:8000/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -16,26 +23,54 @@ function AskAI() {
 
       const data = await res.json();
       setAnswer(data.answer);
+
+      // ✅ Save to history ONLY if success
+      if (res.ok) {
+        const history = JSON.parse(localStorage.getItem("history")) || [];
+
+        history.unshift({
+          type: "question",
+          text: question,
+          time: new Date().toLocaleString(),
+        });
+
+        localStorage.setItem("history", JSON.stringify(history));
+      }
+
+      // clear input after ask
+      setQuestion("");
     } catch (e) {
-      setAnswer("Error connecting to backend");
+      setAnswer("❌ Error connecting to backend");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="page">
-      <div className="card">
+      {/* hero */}
+      <div className="ask-hero">
+        <h1>Ask AI 🤖</h1>
+        <p>Ask anything from your uploaded materials.</p>
+      </div>
+
+      {/* input */}
+      <div className="ask-input-card">
         <input
+          className="ask-input"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask from syllabus..."
-          style={{ width: "70%", padding: 10 }}
         />
-        <button onClick={ask} style={{ marginLeft: 10 }}>Ask</button>
+        <button className="ask-btn" onClick={ask} disabled={loading}>
+          {loading ? "Asking..." : "Ask"}
+        </button>
       </div>
 
-      <div className="card">
+      {/* answer */}
+      <div className="ask-answer-card">
         <h3>Answer</h3>
-        <pre>{answer}</pre>
+        <div className="ask-answer">{answer}</div>
       </div>
     </div>
   );

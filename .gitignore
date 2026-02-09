@@ -9,12 +9,9 @@ build/*
 # Ignore tests build directory
 tests/build/
 
-# Sometimes data files are created for tetsing
-
 
 # VS Code directory
 .vscode/
 .vscode/*
 
-# Frontend
 .env

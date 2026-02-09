@@ -1,21 +1,21 @@
+import logo from "../assets/endee.jpg";
+
 function Header() {
   const logout = () => {
     localStorage.removeItem("user");
-    window.location.reload();
+    window.location.href = "/login";
   };
 
   return (
-    <div style={{
-      padding: "15px 25px",
-      background: "#0f172a",
-      borderBottom: "1px solid #334155",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center"
-    }}>
-      <b>🎓 Endee AI Study Copilot</b>
+    <div className="app-header">
+      <div className="header-left">
+        <img src={logo} alt="logo" className="app-logo" />
+        <h2 className="app-title">Endee AI Study Copilot</h2>
+      </div>
 
-      <button onClick={logout}>Logout</button>
+      <button onClick={logout} className="logout-btn">
+        Logout
+      </button>
     </div>
   );
 }

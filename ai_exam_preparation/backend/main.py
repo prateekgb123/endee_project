@@ -4,6 +4,8 @@ from embedder import get_embedding
 from endee_client import search
 from llm import generate_answer
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import UploadFile, File, Form
+from endee_client import add_doc
 
 app = FastAPI()
 
@@ -64,3 +66,40 @@ Provide:
         print("🔥 ERROR IN /ask:", str(e))
         return {"answer": "Backend error: " + str(e), "sources": []}
 
+@app.post("/upload")
+async def upload_file(
+    file: UploadFile = File(...),
+    category: str = Form(...)
+):
+    try:
+        content = await file.read()
+        text = content.decode("utf-8")
+
+        lines = text.split("\n")
+
+        inserted = 0
+
+        for i, line in enumerate(lines):
+            if len(line.strip()) > 10:
+                vector = get_embedding(line)
+
+                add_doc({
+                    "id": f"{file.filename}_{i}",
+                    "vector": vector,
+                    "metadata": {
+                        "text": line,
+                        "category": category,
+                        "source": file.filename
+                    }
+                })
+
+                inserted += 1
+
+        return {
+            "message": "Uploaded successfully",
+            "chunks": inserted
+        }
+
+    except Exception as e:
+        print("UPLOAD ERROR:", e)
+        return {"error": str(e)}

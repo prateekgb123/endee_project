@@ -1,26 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Sidebar() {
-  const style = { display: "block", margin: "12px 0", color: "white" };
+  const location = useLocation();
+
+  const Item = ({ to, label }) => (
+    <Link
+      to={to}
+      className={
+        location.pathname === to ? "menu-item active" : "menu-item"
+      }
+    >
+      {label}
+    </Link>
+  );
 
   return (
-    <div style={{
-      width: 220,
-      background: "#0f172a",
-      padding: 20,
-      minHeight: "100vh",
-      borderRight: "1px solid #334155"
-    }}>
+    <div className="sidebar">
       <h3>Navigation</h3>
 
-      <Link to="/" style={style}>🏠 Dashboard</Link>
-      <Link to="/ask" style={style}>🤖 Ask AI</Link>
-      <Link to="/history" style={style}>🕘 History</Link>
-      <Link to="/upload" style={style}>📄 Upload</Link>
-      <Link to="/weak" style={style}>📉 Weak Areas</Link>
-      <Link to="/analytics" style={style}>📊 Analytics</Link>
-      <Link to="/admin" style={style}>🧑‍💼 Admin</Link>
-      <Link to="/login" style={style}>🔐 Login</Link>
+      <Item to="/" label="🏠 Dashboard" />
+      <Item to="/ask" label="🤖 Ask AI" />
+      <Item to="/history" label="🕘 History" />
+      <Item to="/upload" label="📄 Upload" />
+      <Item to="/weak" label="📉 Weak Areas" />
+      <Item to="/analytics" label="📊 Analytics" />
+      <Item to="/admin" label="👨‍💼 Admin" />
     </div>
   );
 }
