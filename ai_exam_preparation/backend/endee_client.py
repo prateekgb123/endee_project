@@ -9,8 +9,11 @@ def create_index(dimension=384):
     res = requests.post(
         f"{ENDEE_URL}/api/v1/index/create",
         json={
-            "index_name": INDEX_NAME,
-            "dimension": dimension
+            "index": {
+                "name": INDEX_NAME,
+                "dimension": dimension,
+                "metric": "cosine"
+            }
         }
     )
     print("CREATE INDEX:", res.status_code)
@@ -18,39 +21,44 @@ def create_index(dimension=384):
 
 
 # insert vector
-INDEX_NAME = "exam_index"
-
 def add_doc(doc_id, vector, metadata):
-    payload = {
-        "index_name": INDEX_NAME,
-        "vectors": [
-            {
-                "id": doc_id,
-                "values": vector,
-                "metadata": metadata
-            }
-        ]
-    }
-
-    res = requests.post(f"{ENDEE_URL}/api/v1/vector/upsert", json=payload)
+    res = requests.post(
+        f"{ENDEE_URL}/api/v1/index/upsert",
+        json={
+            "index_name": INDEX_NAME,
+            "vectors": [
+                {
+                    "id": doc_id,
+                    "values": vector,
+                    "metadata": metadata
+                }
+            ]
+        }
+    )
 
     print("UPSERT:", res.status_code)
-    print(res.text)
-
+    return res.text
 
 
 # search vectors
 def search(vector, top_k=5):
     res = requests.post(
-        f"{ENDEE_URL}/api/v1/vector/search",
+        f"{ENDEE_URL}/api/v1/vector/query",
         json={
             "index_name": INDEX_NAME,
-            "vector": vector,
-            "top_k": top_k
+            "queries": [
+                {
+                    "vector": vector,
+                    "top_k": top_k
+                }
+            ]
         }
     )
 
-    print("STATUS:", res.status_code)
-    print("RAW RESPONSE:", res.text)
+    print("SEARCH:", res.status_code)
+    print("RAW:", res.text)
+
+    if res.status_code != 200:
+        raise Exception(res.text)
 
     return res.json()

@@ -23,12 +23,11 @@ for category, file in files.items():
 
             metadata = {
                 "text": text,
-                "category": category
+                "category": category,
+                "source": os.path.basename(file)
             }
 
-            # ✅ correct call
             add_doc(f"doc{doc_id}", vector, metadata)
-
             doc_id += 1
 
 print("✅ Data inserted into Endee")
