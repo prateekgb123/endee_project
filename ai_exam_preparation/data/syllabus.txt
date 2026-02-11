@@ -1,4 +1,0 @@
-Operating System
-DBMS
-Computer Networks
-OOPS

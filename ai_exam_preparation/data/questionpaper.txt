@@ -1,3 +1,0 @@
-Explain deadlock
-What is normalization
-Difference between TCP and UDP
