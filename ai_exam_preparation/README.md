@@ -1,103 +1,106 @@
-#Endee AI Study Copilot
-AI-powered contextual assistant for smarter exam preparation
+Endee AI Study Copilot--
 
-Endee AI Study Copilot is a full-stack Retrieval Augmented Generation (RAG) learning platform that helps students get answers strictly from their own study material.
-Unlike generic AI systems, this application uses vector search powered by Endee Labs to retrieve relevant knowledge from uploaded notes, PDFs, and syllabus documents before generating answers.
+AI-powered contextual assistant for exam preparation using Retrieval Augmented Generation (RAG).
 
-The result → accurate, explainable, syllabus-aligned responses.
+1. Project Overview:-
 
-1. Why This Project Matters:-
+Endee AI Study Copilot is a backend system that generates answers strictly from a student’s own study materials such as syllabus documents, notes, and question banks.
 
-This project demonstrates how modern AI products are built in industry:
+Unlike generic AI tools, this platform retrieves relevant content from a private knowledge base before generating responses.
+This produces accurate, explainable, and curriculum-aligned answers.
 
-1.1 Private knowledge retrieval
-1.2 Vector databases
-1.3 API-first backend
-1.4 Production-style pipelines
-1.5 Stateful user analytics
-1.6 Clean UI + infrastructure setup
+The project demonstrates how modern AI assistants are engineered using vector search, retrieval pipelines, and modular APIs.
 
-It moves beyond demos into real product engineering.
+2. Problem Statement:-
 
-2. Core Features:-
+Students require:
 
-2.1 Upload PDFs, notes, study materials
-2.2 Answers generated only from uploaded content
-2.3 Embedding-based semantic retrieval
-2.4 Retrieval Augmented Generation (RAG)
-2.5 Question & activity history
-2.6 Progress + weak area tracking
-2.7 Admin visibility
-2.8 Authentication-ready structure
-2.9 Modular backend
-2.10 Dockerized environment
+2.1 Reliable answers
+2.2 Alignment with their syllabus
+2.3 Source-grounded responses
+2.4 A way to continuously analyze preparation
 
-3. System Workflow:-
+Large language models alone are not sufficient because they may hallucinate or provide generic information.
 
-Upload → Chunk → Embed → Store in Endee → Retrieve → Prompt → Answer → Track
+This system solves that problem using Retrieval Augmented Generation.
 
+3. System Design / Technical Approach:-
 
-3.1 Student uploads documents
-3.2 Backend extracts and chunks text
-3.3 Chunks are converted into embeddings
-3.4 Stored in Endee vector database
+The backend follows a RAG architecture.
 
-When a question is asked:
+3.1 Documents are split into chunks
+3.2 Each chunk is converted into an embedding
+3.3 Embeddings are stored in a vector database
+3.4 A user question is embedded
+3.5 Similar vectors are retrieved
+3.6 Retrieved context is injected into the prompt
+3.7 LLM generates a grounded response
 
-3.5 Semantic search retrieves relevant context
-3.6 Context sent to LLM
-3.7 Grounded answer returned
+This ensures traceability and syllabus relevance.
 
-3.8 Activity saved for analytics
+4. How Endee is Used:-
 
-4. High Level Architecture:-
+Endee acts as the semantic memory layer of the system.
 
-React UI
-   ↓
-Python REST API
-   ↓
-Document Processing
-   ↓
-Embeddings
-   ↓
+4.1 Stores vector representations of document chunks
+4.2 Performs similarity search
+4.3 Returns top relevant matches
+4.4 Enables fast retrieval at scale
+
+Without vector retrieval, grounded answering is not possible.
+
+5. System Workflow:-
+5.1 During ingestion-
+
+Upload → Chunk → Embed → Store in Endee
+
+5.2 During questioning-
+
+Question → Embed → Retrieve → Build Prompt → Generate → Return Answer
+
+6. High Level Architecture:-
+
+Client / Swagger
+↓
+FastAPI Backend
+↓
+Embedding Model
+↓
 Endee Vector DB
-   ↓
-  LLM
-   ↓
-Answer + Analytics
+↓
+LLM
+↓
+Answer
 
-5. Practical AI Use Case Demonstrated:-
+7. Core Backend Capabilities:-
 
-5.1 Retrieval Augmented Generation (RAG)
-5.2 Semantic Search
-5.3 Knowledge-grounded responses
-5.4 AI learning assistant workflows
+7.1 Document ingestion
+7.2 Embedding generation
+7.3 Vector storage
+7.4 Semantic retrieval
+7.5 Context construction
+7.6 LLM grounded answering
+7.7 Upload API
+7.8 Failure-safe responses
 
-Vector retrieval is the core engine of the system.
+8. Tech Stack:-
+8.1 Backend-
 
-6. Tech Stack:-
+Python, FastAPI, REST APIs
 
-6.1 Frontend-
+8.2 AI Layer-
 
-React.js, React Router, Component-based architecture, Responsive UI
+Sentence Transformers, prompt construction, context injection
 
-6.2 Backend-
-
-Python, REST APIs, Document ingestion pipeline
-
-6.3 AI Layer-
-
-Embeddings generation, Semantic similarity search, Prompt construction, Context injection
-
-6.4 Vector Database-
+8.3 Vector Database-
 
 Endee
 
-6.5 Infrastructure-
+8.4 Infrastructure-
 
-Docker, Environment configuration, Local deployment ready
+Docker, environment-based configuration
 
-7. Project Structure:-
+9. Project Structure:-
 
 ai_exam_preparation/
 │
@@ -109,86 +112,87 @@ ai_exam_preparation/
 │   ├── endee_client.py
 │   └── requirements.txt
 │
-├── frontend/
-├── data/
 ├── infra/
 └── docker-compose.yml
 
-8. Application Flow:-
 
-8.1 Upload material
-8.2 Process & embed
-8.3 Store in Endee
-8.4 Ask question
-8.5 Retrieve best context
-8.6 Generate answer
-8.7 Save history
-8.8 Track improvement
+Frontend and raw datasets are excluded in this submission to focus on backend evaluation.
 
-9. UI Modules:-
+10. Setup & Execution Instructions:-
 
-9.1 Dashboard
-9.2 Ask AI
-9.3 Upload Documents
-9.4 History
-9.5 Weak Areas
-9.6 Analytics
-9.7 Admin
-
-10. Engineering Highlights:-
-
-10.1 Clear separation of concerns
-10.2 Pluggable AI components
-10.3 Scalable retrieval pipeline
-10.4 Replaceable LLM layer
-10.5 Persistent learning data
-10.6 API-driven design
-10.7 Production-ready structure
-
-11. Run Locally:-
-
-11.1 Clone the repository-
-git clone <your-forked-repo>
+10.1 Clone repository-
+git clone <repo-url>
 cd ai_exam_preparation
 
-11.2 Backend setup-
+10.2 Start Endee using Docker-
+docker compose up -d
+
+
+Runs on:
+
+http://localhost:8080
+
+10.3 Backend setup-
 pip install -r backend/requirements.txt
-python backend/main.py
 
 
-Backend → http://localhost:8000
+Create .env inside backend:
 
-11.3 Frontend setup-
-cd frontend
-npm install
-npm start
+GOOGLE_API_KEY=your_key_here
+
+10.4 Run API server-
+uvicorn main:app --reload
 
 
-Frontend → http://localhost:3000
+API:
 
-12. Run with Docker:-
+http://127.0.0.1:8000
 
-docker-compose up --build
 
-13. Future Improvements:-
+Swagger:
 
-13.1 Multi-user analytics
-13.2 Smarter weak topic detection
-13.3 Personalized learning paths
-13.4 Voice-based questioning
-13.5 Cloud deployment
-13.6 Role-based admin system
+http://127.0.0.1:8000/docs
 
-14. Skills Demonstrated:-
+11. How Recruiters Can Test:-
 
-14.1 Full Stack Development
-14.2 AI product engineering
-14.3 Vector database integration
-14.4 Retrieval pipeline design
-14.5 React application architecture
-14.6 Backend API systems
-14.7 Docker workflows
+11.1 Health check-
 
-15. Author:-
+GET /health
 
-Built to enhance exam preparation using context-aware AI and modern retrieval systems.
+
+11.2 Ask a question-
+
+POST /ask
+{
+  "question": "Important OS topics?"
+}
+
+
+11.3 Upload material-
+
+POST /upload
+
+
+The API is built to respond gracefully even if external services fail.
+
+12. Engineering Highlights:-
+
+12.1 Clear separation of concerns
+12.2 Replaceable vector DB
+12.3 Replaceable LLM layer
+12.4 Robust error handling
+12.5 Modular services
+12.6 Production-style RAG flow
+
+13. Skills Demonstrated:-
+
+13.1 Backend system design
+13.2 Retrieval pipeline implementation
+13.3 Vector database integration
+13.4 Prompt orchestration
+13.5 API reliability
+13.6 Infrastructure awareness
+
+14. Author:-
+
+Built as a demonstration of how real-world AI learning assistants are implemented using modern retrieval architectures.
