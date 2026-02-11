@@ -37,28 +37,36 @@ def add_doc(doc_id, vector, metadata):
     )
 
     print("UPSERT:", res.status_code)
-    return res.text
-
-
-# search vectors
-def search(vector, top_k=5):
-    res = requests.post(
-        f"{ENDEE_URL}/api/v1/vector/query",
-        json={
-            "index_name": INDEX_NAME,
-            "queries": [
-                {
-                    "vector": vector,
-                    "top_k": top_k
-                }
-            ]
-        }
-    )
-
-    print("SEARCH:", res.status_code)
-    print("RAW:", res.text)
 
     if res.status_code != 200:
         raise Exception(res.text)
 
-    return res.json()
+    return res.text
+
+
+
+# search vectors
+def search(vector, top_k=5):
+    vector_str = ",".join(map(str, vector))
+
+    res = requests.get(
+        f"{ENDEE_URL}/api/search",
+        params={
+            "index": INDEX_NAME,
+            "top_k": top_k,
+            "vector": vector_str
+        }
+    )
+
+    print("SEARCH:", res.status_code)
+    print("RAW:", res.text[:200])
+
+    if res.status_code != 200:
+        raise Exception(res.text)
+
+    try:
+        return res.json()
+    except Exception:
+        print("Non JSON response from Endee")
+        return {"matches": []}
+

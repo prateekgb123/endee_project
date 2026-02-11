@@ -36,22 +36,24 @@ def ask(q: Query):
     try:
         vector = get_embedding(q.question)
 
-        results = search(vector)
-
-        # correct for Endee OSS
-        matches = results.get("matches", [])
-
-        if not matches:
-            return {"answer": "No data found in knowledge base.", "sources": []}
+        # try search but do not die
+        try:
+            results = search(vector)
+            matches = results.get("matches", [])
+        except Exception as e:
+            print("Search failed:", e)
+            matches = []
 
         context = ""
         for m in matches[:5]:
-            context += m["metadata"]["text"] + "\n"
+            if "metadata" in m and "text" in m["metadata"]:
+                context += m["metadata"]["text"] + "\n"
+
+        if context.strip() == "":
+            context = "No reference material found."
 
         prompt = f"""
 You are an exam preparation AI.
-
-Answer ONLY from the provided context.
 
 Question:
 {q.question}
@@ -69,12 +71,13 @@ Provide:
 
         return {
             "answer": answer,
-            "sources": [m["metadata"]["text"] for m in matches[:5]]
+            "sources": [m.get("metadata", {}).get("text", "") for m in matches[:5]]
         }
 
     except Exception as e:
         print("🔥 ERROR IN /ask:", str(e))
-        return {"answer": "Backend error: " + str(e), "sources": []}
+        return {"answer": "System temporarily unavailable.", "sources": []}
+
 
 
 # ===============================
